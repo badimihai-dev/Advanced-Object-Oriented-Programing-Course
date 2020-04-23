@@ -1,6 +1,6 @@
 package com.assets;
 
-public class Task {
+public class Task{
     private String title;
     private boolean status;
 

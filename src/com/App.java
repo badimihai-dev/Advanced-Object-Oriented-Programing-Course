@@ -5,6 +5,7 @@ import com.assets.TodoList;
 import com.assets.derivedtasks.General;
 import com.assets.derivedtasks.Objective;
 import com.assets.derivedtasks.Planned;
+import com.assets.store.Reducer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.*;
 public class App {
     private List<Task> allTasks = new ArrayList<Task>();
     private List<TodoList> allList = new ArrayList<TodoList>();
+    private Reducer reducer = Reducer.create();
 
     public void selectTask(Task t){
         Scanner keyboard = new Scanner(System.in);
@@ -243,6 +245,7 @@ public class App {
                 keyboard.nextLine();
                 t.updateImportancy(imp);
                 allTasks.add(t);
+                reducer.write(t);
                 break;
 
             case "AP":
@@ -264,6 +267,7 @@ public class App {
                 }
                 else{
                     allTasks.add(p);
+                    reducer.write(p);
                 }
                 break;
 
@@ -286,6 +290,7 @@ public class App {
                 }
                 else{
                     allTasks.add(o);
+                    reducer.write(o);
                 }
                 break;
             default:
@@ -299,6 +304,7 @@ public class App {
         System.out.print("List name: ");
         String title = key.nextLine();
         allList.add(new TodoList(title));
+        reducer.write(new TodoList(title));
     }
 
     public void Run(){
