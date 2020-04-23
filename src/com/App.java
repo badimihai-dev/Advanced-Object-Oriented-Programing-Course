@@ -6,15 +6,18 @@ import com.assets.derivedtasks.General;
 import com.assets.derivedtasks.Objective;
 import com.assets.derivedtasks.Planned;
 import com.assets.store.Reducer;
+import com.assets.store.Store;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class App {
-    private List<Task> allTasks = new ArrayList<Task>();
-    private List<TodoList> allList = new ArrayList<TodoList>();
-    private Reducer reducer = Reducer.create();
+public class App extends Store {
+    private Reducer reducer;
+
+    public App() {
+        reducer = Reducer.create();
+    }
 
     public void selectTask(Task t){
         Scanner keyboard = new Scanner(System.in);

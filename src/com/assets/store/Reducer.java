@@ -1,5 +1,8 @@
 package com.assets.store;
 
+import com.assets.derivedtasks.General;
+import com.assets.derivedtasks.Planned;
+
 import java.io.BufferedReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -7,11 +10,35 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class Reducer {
+public class Reducer extends Store{
     private static Reducer reducer_instance = null;
-    private BufferedReader csvReader;
 
+    //Initialize virtual store
     private Reducer(){
+        for(String type : storeTypes){
+            String fileContent = this.read(type);
+            if(fileContent != ""){
+                String[] parsedContent = fileContent.split("\n");
+                switch (type){
+                    case "General":
+                        for(String task: parsedContent){
+                            String[] elements = task.split(",");
+                            int importancy = Integer.parseInt(elements[0]);
+                            String title = elements[1].replace("&comma;", ",");
+                            boolean status = Boolean.parseBoolean(elements[2]);
+                            General t = new General(title, status, importancy);
+                            allTasks.add(t);
+                        }
+                        break;
+                    case "Objective":
+                        break;
+                    case "Planned":
+                        break;
+                    case "TodoList":
+                        break;
+                }
+            }
+        }
     }
 
     public static Reducer create(){
@@ -21,7 +48,7 @@ public class Reducer {
         return reducer_instance;
     }
 
-    public static List<?> unpack(Object obj) {
+    private static List<?> unpack(Object obj) {
         List<?> list = new ArrayList<>();
         if (obj.getClass().isArray()) {
             list = Arrays.asList((Object[])obj);
@@ -72,11 +99,9 @@ public class Reducer {
 
                                 subField.setAccessible(true);
                                 Object subValue = subField.get(item);
-                                if(j == declaredSubFields.size()-1){
-                                    arrayString += subValue.toString();
-                                }
-                                else{
-                                    arrayString += subValue.toString() + "$";
+                                arrayString += subValue.toString();
+                                if(j != declaredSubFields.size()-1){
+                                    arrayString += "$";
                                 }
                             }
                             if(i != valueArray.size()-1) {
@@ -85,10 +110,10 @@ public class Reducer {
                         }
                     }
 
-                    output += arrayString;
+                    output += arrayString.replace(",", "&comma;");
                 }
                 else{
-                    output += value.toString();
+                    output += value.toString().replace(",", "&comma;");
                 }
                 if(f != declaredFields.size()-1){
                     output += ",";
@@ -105,14 +130,14 @@ public class Reducer {
         return output;
     }
 
+    private String read(String fileName){
+        String filePath = fileName + ".csv";
+        return Actions.read(filePath);
+    }
+
     public void write(Object obj){
         String filePath = obj.getClass().getSimpleName() + ".csv";
         Actions.write( filePath, ToCsv(obj));
-    }
-
-    public void read(String fileName){
-        String filePath = fileName + ".csv";
-        Actions.read(filePath);
     }
 
     public void update(Object obj){

@@ -1,6 +1,7 @@
 package com.assets.store;
 
 import java.io.*;
+import java.util.Scanner;
 
 public class Actions {
     private static String directory = System.getProperty("user.dir");
@@ -33,18 +34,18 @@ public class Actions {
         String absolutePath = directory + storePath + fileName;
         String output = "";
 
-        try(FileInputStream fileInputStream = new FileInputStream(absolutePath)) {
-            int ch = fileInputStream.read();
-            while(ch != -1) {
-                output += ch;
-                ch = fileInputStream.read();
+        try {
+            File myObj = new File(absolutePath);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                output += data;
             }
+            myReader.close();
         } catch (FileNotFoundException e) {
-            // exception handling
-        } catch (IOException e) {
-            // exception handling
+            System.out.println("File not found.");
+            e.printStackTrace();
         }
-
         return output;
     }
 
