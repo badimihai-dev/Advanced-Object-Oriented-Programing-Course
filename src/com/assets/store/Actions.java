@@ -22,7 +22,6 @@ public class Actions {
             out.append(fileContent);
             out.close();
 
-            System.out.println("done!");
 
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -40,6 +39,9 @@ public class Actions {
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 output += data;
+                if(myReader.hasNextLine()){
+                    output += "\n";
+                }
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -49,11 +51,24 @@ public class Actions {
         return output;
     }
 
-    public static void update(String fileName, String id, String content){
+    public static void update(String fileName, String fileContent){
+        String absolutePath = directory + storePath + fileName;
+        File f = new File(absolutePath);
 
-    }
+        try{
+            PrintWriter out = null;
+            if ( f.exists() && !f.isDirectory() ) {
+                out = new PrintWriter(new FileOutputStream(new File(absolutePath), false));
+            }
+            else {
+                out = new PrintWriter(absolutePath);
+            }
+            out.write(fileContent);
+            out.close();
 
-    public static void delete(String fileName, String id){
 
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

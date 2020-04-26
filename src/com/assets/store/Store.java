@@ -2,6 +2,9 @@ package com.assets.store;
 
 import com.assets.Task;
 import com.assets.TodoList;
+import com.assets.derivedtasks.General;
+import com.assets.derivedtasks.Objective;
+import com.assets.derivedtasks.Planned;
 
 import java.util.ArrayList;
 import java.util.List;

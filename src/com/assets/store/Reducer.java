@@ -1,41 +1,86 @@
 package com.assets.store;
 
+import com.assets.TodoList;
 import com.assets.derivedtasks.General;
+import com.assets.derivedtasks.Objective;
 import com.assets.derivedtasks.Planned;
 
 import java.io.BufferedReader;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Reducer extends Store{
     private static Reducer reducer_instance = null;
 
     //Initialize virtual store
-    private Reducer(){
+    private Reducer() {
         for(String type : storeTypes){
             String fileContent = this.read(type);
             if(fileContent != ""){
                 String[] parsedContent = fileContent.split("\n");
-                switch (type){
-                    case "General":
-                        for(String task: parsedContent){
-                            String[] elements = task.split(",");
+                for(String task: parsedContent) {
+                    String[] elements = task.split(",");
+                    switch (type) {
+                        case "General":
                             int importancy = Integer.parseInt(elements[0]);
                             String title = elements[1].replace("&comma;", ",");
                             boolean status = Boolean.parseBoolean(elements[2]);
                             General t = new General(title, status, importancy);
                             allTasks.add(t);
-                        }
-                        break;
-                    case "Objective":
-                        break;
-                    case "Planned":
-                        break;
-                    case "TodoList":
-                        break;
+                            break;
+                        case "Objective":
+                            title = elements[4].replace("&comma;", ",");
+                            Date date = new Date();
+                            try{
+                                date=new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy").parse(elements[3]);
+                            }catch (ParseException e){
+                                System.out.println("Date parse Failed");
+                                System.exit(0);
+                            }
+
+                            status = Boolean.parseBoolean(elements[5]);
+                            Objective o = new Objective(title, date);
+                            if(status){
+                                o.toggleStatus();
+                            }
+                            if(!elements[1].equals("")){
+                                String[] subTasks = elements[1].split("\\|");
+                                for(String subTask : subTasks){
+                                    String[] st = subTask.split("\\$");
+                                    o.addSubtask(st[0], Boolean.parseBoolean(st[1]));
+                                }
+                            }
+                            allTasks.add(o);
+                            break;
+                        case "Planned":
+                            title = elements[1].replace("&comma;", ",");
+                            date = new Date();
+                            try{
+                                date=new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy").parse(elements[0]);
+                            }catch (ParseException e){
+                                System.out.println("Date parse Failed");
+                                System.exit(0);
+                            }
+
+                            status = Boolean.parseBoolean(elements[2]);
+                            Planned p = new Planned(title, status, date);
+                            allTasks.add(p);
+                            break;
+                        case "TodoList":
+                            title = elements[0].replace("&comma;", ",");
+                            TodoList tl = new TodoList(title);
+                            if(elements.length == 2 && !elements[1].equals("")){
+                                String[] subTasks = elements[1].split("\\|");
+                                for(String subTask : subTasks){
+                                    String[] st = subTask.split("\\$");
+                                    tl.addTasks(st[1], Boolean.parseBoolean(st[2]), Integer.parseInt(st[0]));
+                                }
+                            }
+                            allList.add(tl);
+                            break;
+                    }
                 }
             }
         }
@@ -141,10 +186,31 @@ public class Reducer extends Store{
     }
 
     public void update(Object obj){
+        String filePath = obj.getClass().getSimpleName() + ".csv";
 
+        String fileContent = "";
+
+        String className = obj.getClass().getSimpleName();
+
+        if(obj.getClass().getSimpleName() != "TodoList"){
+            for(Object task : allTasks){
+                String taskClass = task.getClass().getSimpleName();
+                if(taskClass == className){
+                    fileContent += ToCsv(task);
+                }
+            }
+        }
+        else{
+            for(Object list : allList){
+                String listClass = list.getClass().getSimpleName();
+                if(listClass == className){
+                    fileContent += ToCsv(list);
+                }
+            }
+        }
+
+
+        Actions.update( filePath, fileContent);
     }
 
-    public void delete(Object obj){
-
-    }
 }

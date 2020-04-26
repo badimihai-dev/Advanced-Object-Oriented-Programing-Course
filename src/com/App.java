@@ -60,6 +60,7 @@ public class App extends Store {
                         case "CS":
                             assert t instanceof General;
                             ((General) t).toggleStatus();
+                            reducer.update(((General) t));
                             break;
                         case "CI":
                             System.out.print("Importancy: ");
@@ -67,11 +68,13 @@ public class App extends Store {
                             keyboard.nextLine();
                             assert t instanceof General;
                             ((General) t).updateImportancy(imp);
+                            reducer.update(((General) t));
                             break;
                         case "RN":
                             System.out.print("New title: ");
                             String title = keyboard.nextLine();
                             t.setTitle(title);
+                            reducer.update(t);
                             break;
                         case "CD":
                             System.out.print("New date: ");
@@ -86,16 +89,19 @@ public class App extends Store {
                             }
                             assert t instanceof Planned;
                             ((Planned) t).setHappeningDate(dt);
+                            reducer.update((General) t);
                             break;
                         case "AS":
                             System.out.print("Subtask title: ");
                             title = keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).addSubtask(title, false);
+                            reducer.update((Objective) t);
                             break;
                         case "PS":
                             assert t instanceof Objective;
                             ((Objective) t).printSubtasks();
+                            reducer.update((Objective) t);
                             break;
                         case "US":
                             System.out.print("Subtask index: ");
@@ -103,6 +109,7 @@ public class App extends Store {
                             keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).updateSubtask(idx);
+                            reducer.update((Objective) t);
                             break;
                         case "DS":
                             System.out.print("Subtask index: ");
@@ -110,6 +117,7 @@ public class App extends Store {
                             keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).removeSubtask(idx);
+                            reducer.update((Objective) t);
                             break;
                         default:
                             System.out.println("Invalid command");
