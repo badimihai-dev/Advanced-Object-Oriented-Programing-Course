@@ -5,18 +5,18 @@ import com.assets.TodoList;
 import com.assets.derivedtasks.General;
 import com.assets.derivedtasks.Objective;
 import com.assets.derivedtasks.Planned;
-import com.assets.store.Reducer;
-import com.assets.store.Store;
+import com.assets.store.ReducerToDelete;
+import com.assets.store.StoreToDelete;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class App extends Store {
-    private Reducer reducer;
+public class App extends StoreToDelete {
+    private ReducerToDelete reducerToDelete;
 
     public App() {
-        reducer = Reducer.create();
+        reducerToDelete = ReducerToDelete.create();
     }
 
     public void selectTask(Task t){
@@ -60,7 +60,7 @@ public class App extends Store {
                         case "CS":
                             assert t instanceof General;
                             ((General) t).toggleStatus();
-                            reducer.update(((General) t));
+                            reducerToDelete.update(((General) t));
                             break;
                         case "CI":
                             System.out.print("Importancy: ");
@@ -68,13 +68,13 @@ public class App extends Store {
                             keyboard.nextLine();
                             assert t instanceof General;
                             ((General) t).updateImportancy(imp);
-                            reducer.update(((General) t));
+                            reducerToDelete.update(((General) t));
                             break;
                         case "RN":
                             System.out.print("New title: ");
                             String title = keyboard.nextLine();
                             t.setTitle(title);
-                            reducer.update(t);
+                            reducerToDelete.update(t);
                             break;
                         case "CD":
                             System.out.print("New date: ");
@@ -89,19 +89,19 @@ public class App extends Store {
                             }
                             assert t instanceof Planned;
                             ((Planned) t).setHappeningDate(dt);
-                            reducer.update((General) t);
+                            reducerToDelete.update((General) t);
                             break;
                         case "AS":
                             System.out.print("Subtask title: ");
                             title = keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).addSubtask(title, false);
-                            reducer.update((Objective) t);
+                            reducerToDelete.update((Objective) t);
                             break;
                         case "PS":
                             assert t instanceof Objective;
                             ((Objective) t).printSubtasks();
-                            reducer.update((Objective) t);
+                            reducerToDelete.update((Objective) t);
                             break;
                         case "US":
                             System.out.print("Subtask index: ");
@@ -109,7 +109,7 @@ public class App extends Store {
                             keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).updateSubtask(idx);
-                            reducer.update((Objective) t);
+                            reducerToDelete.update((Objective) t);
                             break;
                         case "DS":
                             System.out.print("Subtask index: ");
@@ -117,7 +117,7 @@ public class App extends Store {
                             keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).removeSubtask(idx);
-                            reducer.update((Objective) t);
+                            reducerToDelete.update((Objective) t);
                             break;
                         default:
                             System.out.println("Invalid command");
@@ -256,7 +256,7 @@ public class App extends Store {
                 keyboard.nextLine();
                 t.updateImportancy(imp);
                 allTasks.add(t);
-                reducer.write(t);
+                reducerToDelete.write(t);
                 break;
 
             case "AP":
@@ -278,7 +278,7 @@ public class App extends Store {
                 }
                 else{
                     allTasks.add(p);
-                    reducer.write(p);
+                    reducerToDelete.write(p);
                 }
                 break;
 
@@ -301,7 +301,7 @@ public class App extends Store {
                 }
                 else{
                     allTasks.add(o);
-                    reducer.write(o);
+                    reducerToDelete.write(o);
                 }
                 break;
             default:
@@ -315,7 +315,7 @@ public class App extends Store {
         System.out.print("List name: ");
         String title = key.nextLine();
         allList.add(new TodoList(title));
-        reducer.write(new TodoList(title));
+        reducerToDelete.write(new TodoList(title));
     }
 
     public void Run(){
