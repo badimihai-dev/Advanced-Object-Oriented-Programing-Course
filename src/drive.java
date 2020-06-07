@@ -14,8 +14,6 @@ import java.util.Date;
 
 public class drive {
     public static void main(String[] args) throws Exception {
-//        new GUI();
-
-        Audit.logAction("asga");
+        new GUI();
     }
 }
