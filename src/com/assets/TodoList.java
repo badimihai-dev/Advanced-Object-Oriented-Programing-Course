@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TodoList {
+    private int index;
     private String listName;
     private List<General> taskList;
 
@@ -19,6 +20,14 @@ public class TodoList {
     public TodoList(String listName){
         this.listName = listName;
         this.taskList = new ArrayList<General>();
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public void printTasks(){
@@ -33,8 +42,11 @@ public class TodoList {
         }
     }
 
-    public void addTasks(String title, boolean status, int importancy){
-        taskList.add(new General(title, status, importancy));
+    public void addTasks(String title, boolean status, int importancy, int index){
+        General obj = new General(title, status, importancy);
+        obj.setIndex(index);
+
+        taskList.add(obj);
     }
 
     public void updateTasks(int idx){

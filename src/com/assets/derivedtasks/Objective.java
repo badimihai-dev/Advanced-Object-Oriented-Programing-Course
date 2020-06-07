@@ -46,8 +46,13 @@ public class Objective extends Planned {
         }
     }
 
-    public void addSubtask(String title, boolean status){
-        subtasks.add(new Task(title, status));
+    public void addSubtask(String title, boolean status, int index){
+        Task obj = new Task(title, status);
+        obj.setIndex(index);
+        subtasks.add(obj);
+        if(status){
+            completedSubtasks++;
+        }
         updateProgress();
     }
 
@@ -84,6 +89,7 @@ public class Objective extends Planned {
     @Override
     public void Print(){
         super.Print();
+        updateProgress();
         System.out.println("|-Progress " + this.progress + "%");
     }
 }

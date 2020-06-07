@@ -24,6 +24,10 @@ public class Planned extends Task {
         this.happeningDate = date;
     }
 
+    public Date getHappeningDate() {
+        return happeningDate;
+    }
+
     public long getCountdown(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yyyy");
         SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");

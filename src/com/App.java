@@ -5,18 +5,14 @@ import com.assets.TodoList;
 import com.assets.derivedtasks.General;
 import com.assets.derivedtasks.Objective;
 import com.assets.derivedtasks.Planned;
-import com.assets.store.ReducerToDelete;
-import com.assets.store.StoreToDelete;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class App extends StoreToDelete {
-    private ReducerToDelete reducerToDelete;
+public class App {
 
-    public App() {
-        reducerToDelete = ReducerToDelete.create();
+    public App(){
     }
 
     public void selectTask(Task t){
@@ -60,7 +56,7 @@ public class App extends StoreToDelete {
                         case "CS":
                             assert t instanceof General;
                             ((General) t).toggleStatus();
-                            reducerToDelete.update(((General) t));
+                            //TODO update general task
                             break;
                         case "CI":
                             System.out.print("Importancy: ");
@@ -68,13 +64,13 @@ public class App extends StoreToDelete {
                             keyboard.nextLine();
                             assert t instanceof General;
                             ((General) t).updateImportancy(imp);
-                            reducerToDelete.update(((General) t));
+                            //TODO update general task
                             break;
                         case "RN":
                             System.out.print("New title: ");
                             String title = keyboard.nextLine();
                             t.setTitle(title);
-                            reducerToDelete.update(t);
+                            //TODO update any task's title
                             break;
                         case "CD":
                             System.out.print("New date: ");
@@ -89,19 +85,17 @@ public class App extends StoreToDelete {
                             }
                             assert t instanceof Planned;
                             ((Planned) t).setHappeningDate(dt);
-                            reducerToDelete.update((General) t);
+                            //TODO update planned or objective
                             break;
                         case "AS":
                             System.out.print("Subtask title: ");
                             title = keyboard.nextLine();
                             assert t instanceof Objective;
-                            ((Objective) t).addSubtask(title, false);
-                            reducerToDelete.update((Objective) t);
+                            //TODO update objective
                             break;
                         case "PS":
                             assert t instanceof Objective;
-                            ((Objective) t).printSubtasks();
-                            reducerToDelete.update((Objective) t);
+                            //TODO print objective subtasks
                             break;
                         case "US":
                             System.out.print("Subtask index: ");
@@ -109,7 +103,7 @@ public class App extends StoreToDelete {
                             keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).updateSubtask(idx);
-                            reducerToDelete.update((Objective) t);
+                            //TODO update objective subtask
                             break;
                         case "DS":
                             System.out.print("Subtask index: ");
@@ -117,7 +111,7 @@ public class App extends StoreToDelete {
                             keyboard.nextLine();
                             assert t instanceof Objective;
                             ((Objective) t).removeSubtask(idx);
-                            reducerToDelete.update((Objective) t);
+                            //TODO delete objective subtask
                             break;
                         default:
                             System.out.println("Invalid command");
@@ -157,7 +151,6 @@ public class App extends StoreToDelete {
                     System.out.print("Importancy: ");
                     int imp = key.nextInt();
                     key.nextLine();
-                    l.addTasks(title, false, imp);
                     System.out.println("NOTES");
                     l.printTasks();
                     break;
@@ -212,31 +205,11 @@ public class App extends StoreToDelete {
     }
 
     public void printAllTasks(){
-        if(allTasks.size() == 0){
-            System.out.println("No notes");
-        }
-        for(int i=0 ;i<allTasks.size(); i++){
-            System.out.print(i + ". ");
-            System.out.println(allTasks.get(i).getTitle());
-            if(allTasks.get(i) instanceof General){
-                System.out.println("   -Type: General");
-            }
-            if(allTasks.get(i) instanceof Planned){
-                if(allTasks.get(i) instanceof Objective){
-                    System.out.println("   -Type: Objective");
-                }
-                else{
-                    System.out.println("   -Type: Planned");
-                }
-            }
-        }
+        //TODO print all tasks
     }
 
     public void printAllLists(){
-        for(int i=0 ;i<allList.size(); i++){
-            System.out.print(i + ". ");
-            System.out.println(allList.get(i).getListName());
-        }
+        //TODO print all lists
     }
 
     public void addTask(){
@@ -255,8 +228,7 @@ public class App extends StoreToDelete {
                 int imp = keyboard.nextInt();
                 keyboard.nextLine();
                 t.updateImportancy(imp);
-                allTasks.add(t);
-                reducerToDelete.write(t);
+                //TODO add general task
                 break;
 
             case "AP":
@@ -277,8 +249,7 @@ public class App extends StoreToDelete {
                     System.out.println("Invalid date");
                 }
                 else{
-                    allTasks.add(p);
-                    reducerToDelete.write(p);
+                    //TODO add planned task
                 }
                 break;
 
@@ -300,8 +271,7 @@ public class App extends StoreToDelete {
                     System.out.println("Invalid date");
                 }
                 else{
-                    allTasks.add(o);
-                    reducerToDelete.write(o);
+                    //TODO add objective task
                 }
                 break;
             default:
@@ -314,8 +284,7 @@ public class App extends StoreToDelete {
         Scanner key = new Scanner(System.in);
         System.out.print("List name: ");
         String title = key.nextLine();
-        allList.add(new TodoList(title));
-        reducerToDelete.write(new TodoList(title));
+        //TODO add list
     }
 
     public void Run(){
@@ -350,13 +319,13 @@ public class App extends StoreToDelete {
                                 System.out.print("Note index: ");
                                 int idx = key.nextInt();
                                 key.nextLine();
-                                selectTask(allTasks.get(idx));
+                                //TODO select task
                                 break;
                             case "DN":
                                 System.out.print("Note index: ");
                                 idx = key.nextInt();
                                 key.nextLine();
-                                allTasks.remove(idx);
+                                //TODO delete task
                                 break;
                             default:
                                 System.out.println("Invalid command");
@@ -367,12 +336,8 @@ public class App extends StoreToDelete {
                 case "GTL":
                     while (true){
                         System.out.println("LISTS");
-                        if(allList.size() != 0){
-                            printAllLists();
-                        }
-                        else{
-                            System.out.println("No lists");
-                        }
+                        //TODO print all lists if none print "no lists"
+
                         System.out.println("COMMANDS");
                         System.out.println("AL - Add new list");
                         System.out.println("SL - Select a list (By index)");
@@ -391,13 +356,13 @@ public class App extends StoreToDelete {
                                 System.out.print("List index: ");
                                 int idx = key.nextInt();
                                 key.nextLine();
-                                selectList(allList.get(idx));
+                                //TODO select list
                                 break;
                             case "DL":
                                 System.out.print("List index: ");
                                 idx = key.nextInt();
                                 key.nextLine();
-                                allList.remove(idx);
+                                //TODO delete list
                                 break;
                             default:
                                 System.out.println("Invalid command");

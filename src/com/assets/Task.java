@@ -3,6 +3,7 @@ package com.assets;
 public class Task{
     private String title;
     private boolean status;
+    private int index;
 
     public Task() {
         this.title = "Untitled Task";
@@ -12,6 +13,14 @@ public class Task{
     public Task(String title, boolean status){
         this.title = title;
         this.status = status;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public void setTitle(String title) {

@@ -12,7 +12,7 @@ public class DatabaseConnection {
 
     private static DatabaseConnection instance;
 
-    private final String url = "jdbc:mysql://localhost:3306/to-do-list?createDatabaseIfNotExist=true";
+    private final String url = "jdbc:mysql://localhost:3306/personalagenda?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true";
     private final String username = "root";
     private final String password = "admin";
 
@@ -31,7 +31,6 @@ public class DatabaseConnection {
         if (instance.getConnection().isClosed()) {
             instance = new DatabaseConnection();
         }
-
         return instance;
     }
 
@@ -52,13 +51,13 @@ public class DatabaseConnection {
 
                 try (Statement currentStatement = connection.createStatement()) {
                     currentStatement.execute(rawStatement);
-                    System.out.println("Succes!");
+                    System.out.println("Operatie executata cu succes!");
                 } catch (SQLException e) {
-                    System.out.println("Eroare: " + e.getMessage());
+                    System.out.println("Operatia nu se poate executa: " + e.getMessage());
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Nu s-a putut incarca fisierul: 'create-table.sql'!");
+            System.out.println("Nu s-a putut incarca fisierul: 'tables.sql'!");
         }
     }
 }
